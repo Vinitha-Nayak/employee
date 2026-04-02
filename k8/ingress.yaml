@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: emp-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
 spec:
   rules:
   - http:
@@ -19,6 +19,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: frontend-service
+            name: frontend   # FIXED
             port:
               number: 3000

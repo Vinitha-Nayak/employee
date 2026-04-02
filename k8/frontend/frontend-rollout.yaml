@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: frontend
+spec:
+  replicas: 4
+
+  strategy:
+    canary:
+      stableService: frontend
+      canaryService: frontend-canary
+
+      trafficRouting:
+        nginx:
+          stableIngress: emp-ingress
+
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 50
+      - pause: {}
+      - setWeight: 100
+
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: vinithaaws/empl-fe:10 
+        ports:
+        - containerPort: 3000

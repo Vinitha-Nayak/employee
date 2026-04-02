@@ -1,21 +1,21 @@
-FROM openjdk:17-jdk-alpine
+# -------- Build Stage --------
+FROM maven:3.9.9-eclipse-temurin-17 AS build
+WORKDIR /build
 
-# Create a non-root user and group
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Set working directory
+# -------- Runtime Stage --------
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
-# Copy JAR file
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Set permissions for the non-root user
+COPY --from=build /build/target/*.jar app.jar
+
 RUN chown -R appuser:appgroup /app
-
-# Switch to the non-root user
 USER appuser
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+EXPOSE 8080
 
+ENTRYPOINT ["java","-jar","/app/app.jar"]
