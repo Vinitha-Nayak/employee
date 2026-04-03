@@ -32,6 +32,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: vinithaaws/empl-fe:10 
+        image: vinithaaws/empl-fe:11 
         ports:
         - containerPort: 3000

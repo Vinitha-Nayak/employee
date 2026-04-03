@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: vinithaaws/empl-be:10
+        image: vinithaaws/empl-be:11 
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
