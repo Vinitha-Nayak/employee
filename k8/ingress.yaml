@@ -9,7 +9,8 @@ metadata:
 spec:
   ingressClassName: nginx # Modern replacement for kubernetes.io/ingress.class
   rules:
-  - http:
+  - host: myapp.com
+    http:
       paths:
       - path: /employee
         pathType: Prefix
