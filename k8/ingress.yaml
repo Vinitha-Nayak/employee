@@ -3,8 +3,11 @@ kind: Ingress
 metadata:
   name: emp-ingress
   annotations:
-    kubernetes.io/ingress.class: nginx
+    # This strips "/employee" from the path before sending it to the backend
+    # So the backend sees GET / instead of GET /employee
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx # Modern replacement for kubernetes.io/ingress.class
   rules:
   - http:
       paths:
@@ -19,6 +22,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: frontend   # FIXED
+            name: frontend
             port:
               number: 3000
