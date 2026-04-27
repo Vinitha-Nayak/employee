@@ -20,7 +20,7 @@ jobs:
       - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
-          context: . # This defines where your source code is
+          context: ./employeemanagement-frontend # This defines where your source code is
           file: ./employeemanagement-frontend/Dockerfile # This points to the Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-app:${{ github.sha }}
