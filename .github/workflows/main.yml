@@ -20,10 +20,10 @@ jobs:
       - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: . # This defines where your source code is
+          file: ./employeemanagement-frontend/Dockerfile # This points to the Dockerfile
           push: true
-          # Replace 'your-dockerhub-username' with your actual username or a variable
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-app:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-app:${{ github.sha }}
 
       - name: Update GitOps Repo
         run: |

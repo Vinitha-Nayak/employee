@@ -3,35 +3,31 @@ kind: Rollout
 metadata:
   name: frontend
 spec:
-  replicas: 4
-
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend # This MUST match the selector above
+    spec:
+      containers:
+      - name: frontend
+        image: vinithaaws/empl-fe:14
+        ports:
+        - containerPort: 3000
   strategy:
     canary:
       stableService: frontend
       canaryService: frontend-canary
-
       trafficRouting:
         nginx:
           stableIngress: emp-ingress
-
       steps:
       - setWeight: 20
-      - pause: {}
+        # If you want it to wait for you to click "Promote" in ArgoCD UI:
+      - pause: {} 
       - setWeight: 50
-      - pause: {}
+      - pause: { duration: 2m } # Or wait automatically for 2 minutes
       - setWeight: 100
-
-  selector:
-    matchLabels:
-      app: frontend
-
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-      - name: frontend
-        image: vinithaaws/empl-fe:12 
-        ports:
-        - containerPort: 3000

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: vinithaaws/empl-be:11 
+        image: vinithaaws/empl-be:14
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
