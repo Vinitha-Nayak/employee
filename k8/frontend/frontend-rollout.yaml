@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: frontend # This MUST match the selector above
+        app: frontend
     spec:
       containers:
       - name: frontend
@@ -21,16 +21,20 @@ spec:
     canary:
       stableService: frontend
       canaryService: frontend-canary
-    analysis:
-      templates:
-        - templateName: success-rate-check
       trafficRouting:
         nginx:
           stableIngress: emp-ingress
+      # Corrected: analysis belongs inside the canary block
+      analysis:
+        templates:
+          - templateName: success-rate-check
+        # Optional: args to pass if your template uses them
+        # args:
+        #   - name: service-name
+        #     value: frontend-canary
       steps:
       - setWeight: 20
-        # If you want it to wait for you to click "Promote" in ArgoCD UI:
-      - pause: {} 
+      - pause: {} # This pauses until you manually promote in ArgoCD UI
       - setWeight: 50
-      - pause: { duration: 2m } # Or wait automatically for 2 minutes
+      - pause: { duration: 2m }
       - setWeight: 100
