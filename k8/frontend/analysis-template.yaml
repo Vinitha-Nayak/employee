@@ -15,6 +15,13 @@ spec:
           # This URL points to the Prometheus service we just installed
           address: http://kube-prom-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
           query: |
-            sum(rate(nginx_ingress_controller_requests{ingress="emp-ingress", status=~"2.*"}[1m])) 
-            / 
-            sum(rate(nginx_ingress_controller_requests{ingress="emp-ingress"}[1m]))
+            (
+              sum(rate(nginx_ingress_controller_requests{ingress="emp-ingress", status=~"2.*"}[1m])) 
+              / 
+              sum(rate(nginx_ingress_controller_requests{ingress="emp-ingress"}[1m]))
+            ) or on() vector(1) 
+            # ^ This 'vector(1)' means: If no traffic, assume 100% success (1.0)
+          # query: |
+          #   sum(rate(nginx_ingress_controller_requests{ingress="emp-ingress", status=~"2.*"}[1m])) 
+          #   / 
+          #   sum(rate(nginx_ingress_controller_requests{ingress="emp-ingress"}[1m]))
